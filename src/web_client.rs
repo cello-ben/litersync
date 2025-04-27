@@ -18,12 +18,21 @@ fn url_encode(title: &str) -> String {
 
 pub fn get_json(title: &str) -> String {
     let query_url: String = vec![&consts::API_BASE_URL, "?title=", &url_encode(title), "&format=json"].join("");
+    // match reqwest::blocking::get(query_url.clone()) {
+    //     Ok(response) => match response.json::<serde_json::Value>() {
+    //         Ok(json) => json["books"][0]["url_zip_file"].to_string(),
+    //         Err(_) => {
+    //             println!("Error deserializing JSON.");
+    //             return String::from("");
+    //         };
+    //     },
+    //     Err(e) => return String::from("")
+    // }
     match reqwest::blocking::get(query_url.clone()) {
         Ok(response) => match response.json::<serde_json::Value>() {
-            Ok(json) => println!("{:?}", json),
-            Err(e) => println!("{}", e)
+            Ok(json) => return json["books"][0]["url_zip_file"].to_string(),
+            Err(_) => return String::from("")
         }
-        Err(e) => println!("{}", e)
+        Err(_) => return String::from("")
     }
-    query_url
 }
