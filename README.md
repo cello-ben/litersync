@@ -1,0 +1,2 @@
+# LiterSync
+I have recently been listening to a great audiobook from [LibriVox](https://www.librivox.org), which provides public domain audiobook recordings. I figured that a fun programming exercise would be to try to make a command line-based client for downloading audiobooks, listening to them, and saving one's place in the book. This is quite new, but more to come!
