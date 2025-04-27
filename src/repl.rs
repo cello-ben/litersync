@@ -37,7 +37,12 @@ fn parse(option: &str, command: &str) {
         "s" => {
             if is_valid_command(command) {
                 //Execute the search command.
+                let zip_url: String = web_client::get_json(command);
                 println!("{}", web_client::get_json(command));
+                match reqwest::blocking::get(zip_url) {
+                    Ok(response) => println!("Got it."),
+                    Err(e) => println!("{}", e)
+                }
             }
         },
         "p" => {
