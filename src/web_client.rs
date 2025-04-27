@@ -1,11 +1,6 @@
 use crate::consts;
 
-use serde::Deserialize;
-
-#[derive(Debug, Deserialize)]
-struct URLWrapper {
-    url_zip_file: String
-}
+use serde_json;
 
 fn url_encode(title: &str) -> String {
     //We'll just deal with spaces for now. TODO more robust solution.
@@ -13,12 +8,12 @@ fn url_encode(title: &str) -> String {
 }
 
 pub fn get_json(title: &str) -> String {
-    let mut query_url: String = consts::API_BASE_URL.to_owned();
-    query_url.push_str("?title=");
-    query_url.push_str(&url_encode(title));
-    query_url.push_str("&format=json");
+    let query_url: String = vec![&consts::API_BASE_URL, "?title=", &url_encode(title), "&format=json"].join("");
     match reqwest::blocking::get(query_url.clone()) {
-        Ok(response) => println!("{:?}", response.json().unwrap()),
+        Ok(response) => match response.json::<serde_json::Value>() {
+            Ok(json) => println!("{:?}", json),
+            Err(e) => println!("{}", e)
+        }
         Err(e) => println!("{}", e)
     }
     query_url
